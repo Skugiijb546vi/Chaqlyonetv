@@ -29,21 +29,21 @@ jobs:
 
       - name: داگرتنی ئەپەکە لە ڕیلیسەوە 🚬
         run: |
-          echo "کاکە خەریکی هێنانی ئەپەکەم لە ڕیلیسی گیتهوب خۆیەوە..."
+          echo "داگرتنی ئەپەکە..."
           wget -O app.apk "https://github.com/Skugiijb546vi/Chaqlyonetv/releases/download/V7/app.apk"
-
-      - name: پشکنینی فایلەکە بزانین قەبارەی چەندە
-        run: |
-          ls -lh app.apk
-          file app.apk
 
       - name: تێکشکاندنی سیکیوریتی فڵەتەر 🚬
         run: |
           echo -e "1\n127.0.0.1\n" | reflutter app.apk
           
+      - name: پشکنینی ناوەکان (کێشەکە لێرە دەردەکەوێت) 🚬
+        run: |
+          echo "دوای تێکشکاندن، ئەم فایلانە لێرەن:"
+          ls -lh *.apk
+          
       - name: واژۆکردنەوەی ئەپەکە بۆ ئەوەی کڕاش نەکات
         run: |
-          java -jar signer.jar -a app.RE.apk --allowResign -o final-output
+          java -jar signer.jar -a *RE*.apk --allowResign -o final-output
           
       - name: بەرزکردنەوەی ئەپە ئامادەکراوەکە بۆ داگرتن
         uses: actions/upload-artifact@v4
