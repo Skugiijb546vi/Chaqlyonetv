@@ -30,13 +30,13 @@ jobs:
       - name: داگرتنی ئەپەکە لە ڕیلیسەوە 🚬
         run: |
           echo "داگرتنی ئەپەکە..."
-          wget -O app.apk "https://github.com/Skugiijb546vi/Chaqlyonetv/releases/download/V7/app.apk"
+          wget -O app.apk "https://github.com/Skugiijb546vi/Chaqlyonetv/releases/download/V1/app.apk"
 
       - name: تێکشکاندنی سیکیوریتی فڵەتەر 🚬
         run: |
           echo -e "1\n127.0.0.1\n" | reflutter app.apk
           
-      - name: پشکنینی ناوەکان (کێشەکە لێرە دەردەکەوێت) 🚬
+      - name: پشکنینی ناوەکان 🚬
         run: |
           echo "دوای تێکشکاندن، ئەم فایلانە لێرەن:"
           ls -lh *.apk
