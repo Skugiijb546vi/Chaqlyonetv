@@ -1,0 +1,51 @@
+name: Flutter App Patcher 🚬
+
+on:
+  workflow_dispatch:
+    inputs:
+      apk_name:
+        description: 'ناوی ئەپەکە بەبێ کورتکراوەی کۆتایی (بۆ نمونە: app)'
+        required: true
+        default: 'app'
+
+jobs:
+  patch-it:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: هێنانە ناوەوەی فایلەکانی ڕیپۆکە
+        uses: actions/checkout@v4
+
+      - name: دانانی پایتۆن بۆ ئامرازەکان
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: دانانی جاڤا بۆ واژۆکردن (Signing)
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: دابەزاندنی بەرنامە پێویستەکان
+        run: |
+          echo "خەریکی دابەزاندنی reFlutter و شتەکانم..."
+          pip install reflutter
+          wget https://github.com/patrickfav/uber-apk-signer/releases/download/v1.3.0/uber-apk-signer-1.3.0.jar -O signer.jar
+
+      - name: تێکشکاندنی سیکیوریتی فڵەتەر 🚬
+        run: |
+          echo "با دەستکاری libflutter.so بکەین تا ڕێگەمان بدات لینکەکان بگرین..."
+          # ژمارە 1 بۆ هەڵبژاردنی ڕێگەی گرتنی ترافیکە لە reflutter
+          echo "1" | reflutter ${{ github.event.inputs.apk_name }}.apk
+          
+      - name: واژۆکردنەوەی ئەپەکە بۆ ئەوەی کڕاش نەکات
+        run: |
+          echo "واژۆی دەکەینەوە تاوەکو پلەی ستۆر کێشە دروست نەکات..."
+          java -jar signer.jar -a release.apk --allowResign -o final-output
+          
+      - name: بەرزکردنەوەی ئەپە ئامادەکراوەکە بۆ داگرتن
+        uses: actions/upload-artifact@v4
+        with:
+          name: Patched-App-Ready
+          path: final-output/*.apk
