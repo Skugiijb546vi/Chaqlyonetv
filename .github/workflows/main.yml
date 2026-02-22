@@ -43,7 +43,7 @@ jobs:
           
       - name: واژۆکردنەوەی ئەپەکە بۆ ئەوەی کڕاش نەکات
         run: |
-          java -jar signer.jar -a release.apk --allowResign -o final-output
+          java -jar signer.jar -a release.RE.apk --allowResign -o final-output
           
       - name: بەرزکردنەوەی ئەپە ئامادەکراوەکە بۆ داگرتن
         uses: actions/upload-artifact@v4
