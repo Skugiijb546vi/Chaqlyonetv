@@ -39,11 +39,11 @@ jobs:
 
       - name: تێکشکاندنی سیکیوریتی فڵەتەر 🚬
         run: |
-          echo "1" | reflutter app.apk
+          echo -e "1\n127.0.0.1\n" | reflutter app.apk
           
       - name: واژۆکردنەوەی ئەپەکە بۆ ئەوەی کڕاش نەکات
         run: |
-          java -jar signer.jar -a release.RE.apk --allowResign -o final-output
+          java -jar signer.jar -a app.RE.apk --allowResign -o final-output
           
       - name: بەرزکردنەوەی ئەپە ئامادەکراوەکە بۆ داگرتن
         uses: actions/upload-artifact@v4
