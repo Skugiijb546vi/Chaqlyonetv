@@ -6,46 +6,46 @@ on:
 jobs:
   patch-it:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
-      - name: هێنانە ناوەوەی فایلەکانی ڕیپۆکە
+      - name: هێنانە ناوەوەی فایلەکان
         uses: actions/checkout@v4
 
-      - name: دانانی پایتۆن بۆ ئامرازەکان
+      - name: دانانی پایتۆن و جاڤا
         uses: actions/setup-python@v5
         with:
           python-version: '3.10'
 
-      - name: دانانی جاڤا بۆ واژۆکردن (Signing)
+      - name: Setup Java
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: دابەزاندنی بەرنامە پێویستەکان
+      - name: دابەزاندنی ئامرازەکان
         run: |
           pip install reflutter
           wget https://github.com/patrickfav/uber-apk-signer/releases/download/v1.3.0/uber-apk-signer-1.3.0.jar -O signer.jar
 
-      - name: داگرتنی ئەپەکە لە ڕیلیسەوە 🚬
+      - name: داگرتنی ئەپەکە بە شێوەی سیستەمی 🚬
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
-          echo "داگرتنی ئەپەکە..."
-          wget -O app.apk "https://github.com/Skugiijb546vi/Chaqlyonetv/releases/download/V1/app.apk"
+          echo "هێنانی فایلەکە لە ڕیلیسەوە..."
+          # ئەم کۆدە خۆکارانە فایلی app.apk لە ڕیلیس ڕادەکێشێت بێ گوێدانە لینک
+          gh release download --pattern 'app.apk'
 
-      - name: تێکشکاندنی سیکیوریتی فڵەتەر 🚬
+      - name: تێکشکاندنی فڵەتەر 🚬
         run: |
           echo -e "1\n127.0.0.1\n" | reflutter app.apk
           
-      - name: پشکنینی ناوەکان 🚬
-        run: |
-          echo "دوای تێکشکاندن، ئەم فایلانە لێرەن:"
-          ls -lh *.apk
-          
-      - name: واژۆکردنەوەی ئەپەکە بۆ ئەوەی کڕاش نەکات
+      - name: واژۆکردنەوەی ئەپەکە
         run: |
           java -jar signer.jar -a *RE*.apk --allowResign -o final-output
           
-      - name: بەرزکردنەوەی ئەپە ئامادەکراوەکە بۆ داگرتن
+      - name: بەرزکردنەوەی ئەپە ئامادەکراوەکە
         uses: actions/upload-artifact@v4
         with:
           name: Patched-App-Ready
