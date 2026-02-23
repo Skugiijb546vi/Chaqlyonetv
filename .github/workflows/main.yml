@@ -1,4 +1,4 @@
-name: Flutter App Patcher (New App) 🚬
+name: Flutter App Patcher (Port 9000) 🚬
 
 on:
   workflow_dispatch:
@@ -29,24 +29,31 @@ jobs:
           pip install reflutter
           wget https://github.com/patrickfav/uber-apk-signer/releases/download/v1.3.0/uber-apk-signer-1.3.0.jar -O signer.jar
 
-      - name: داگرتنی ئەپەکە لە ڕیلیس 🚬
+      - name: داگرتنی ئەپەکە
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          echo "هێنانی فایلی app.apk..."
           gh release download --pattern 'app.apk'
 
-      - name: تێکشکاندنی فڵەتەر و سڕینەوەی کڕاش 🚬
+      - name: تێکشکاندنی فڵەتەر 🚬
         run: |
-          # ئەمە وا دەکات ئەپەکە نەتوانێت Reqable بناسێتەوە و کڕاش نەکات
           echo -e "1\n127.0.0.1\n" | reflutter app.apk
+          
+      - name: نەشتەرگەری گۆڕینی پۆرت بۆ 9000 🚬
+        run: |
+          echo "گۆڕینی پۆرتی 8083 بۆ 9000 لەناو دڵی فڵەتەر..."
+          unzip release.RE.apk -d temp_apk
+          find temp_apk/lib -name "libflutter.so" -exec sed -i 's/8083/9000/g' {} +
+          cd temp_apk
+          zip -r ../app_port9000.apk .
+          cd ..
           
       - name: واژۆکردنەوەی ئەپەکە
         run: |
-          java -jar signer.jar -a *RE*.apk --allowResign -o final-output
+          java -jar signer.jar -a app_port9000.apk --allowResign -o final-output
           
       - name: بەرزکردنەوەی ئەپە ئامادەکراوەکە
         uses: actions/upload-artifact@v4
         with:
-          name: Patched-New-App
+          name: Patched-App-Port9000
           path: final-output/*.apk
