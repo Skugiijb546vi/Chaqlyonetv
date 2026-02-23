@@ -1,4 +1,4 @@
-name: ئامرازی پاتچکردنی خۆم 🚬
+name: ئامرازی پاتچکردنی خۆم بۆ مۆبایل 🚬
 
 on:
   workflow_dispatch:
@@ -10,7 +10,7 @@ jobs:
       contents: write
 
     steps:
-      - name: هێنانی فایلەکان
+      - name: هێنانی فایلەکانم
         uses: actions/checkout@v4
 
       - name: دانانی پایتۆن
@@ -24,7 +24,7 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: دابەزاندنی شتەکان
+      - name: دابەزاندنی ئامرازەکانم
         run: |
           pip install reflutter
           wget https://github.com/patrickfav/uber-apk-signer/releases/download/v1.3.0/uber-apk-signer-1.3.0.jar -O signer.jar
@@ -35,16 +35,16 @@ jobs:
         run: |
           gh release download --pattern 'app.apk'
 
-      - name: شکاندنی سیکیوریتی
+      - name: ئاراستەکردنی داتا بۆ مۆبایلەکەم 🚬
         run: |
-          echo -e "1\n127.0.0.1\n" | reflutter app.apk
+          echo -e "1\n192.168.1.102\n" | reflutter app.apk
           
-      - name: واژۆکردن
+      - name: واژۆکردنەوە
         run: |
           java -jar signer.jar -a *RE*.apk --allowResign -o final-output
           
       - name: بەرزکردنەوەی فایلی تەواوکراو
         uses: actions/upload-artifact@v4
         with:
-          name: App-Tawaw-Kraw
+          name: App-Mobile-Proxy-102
           path: final-output/*.apk
